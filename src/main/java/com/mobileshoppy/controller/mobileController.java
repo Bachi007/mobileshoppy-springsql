@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,31 +25,60 @@ public class mobileController {
 	mobileService service;
 	
 	@RequestMapping(method=RequestMethod.POST, value="/mobile")
-	public String addMobile(@RequestBody mobile m1) {
+	public ResponseEntity<String> addMobile(@RequestBody mobile m1) {
 	
-		return service.saveMobile(m1);
+		String status= service.saveMobile(m1);
+		
+		if(status==null) {
+			return new ResponseEntity<>(status,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		else {
+			return new ResponseEntity<>(status,HttpStatus.CREATED);
+		}
 		
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/mobile")
-	public List<mobile> getMobile(){
-		return service.getMobile();
+	public ResponseEntity<List<mobile>> getMobile(){
+		return new ResponseEntity<>(service.getMobile(),HttpStatus.ACCEPTED);
 	}
 	
 	@PutMapping("/updatemobile")
-	public String updateMobile(@RequestBody mobile m2) {
-		return service.updateMobile(m2);
+	public ResponseEntity<String> updateMobile(@RequestBody mobile m2) {
+		String status= service.updateMobile(m2);
+		if(status==null) {
+			return new ResponseEntity<>(status,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		else {
+			return new ResponseEntity<>(status,HttpStatus.CREATED);
+		}
 	}
 	
 	@DeleteMapping("/mobile/{id}")
-	public String deleteMobile(@PathVariable int id) {
+	public ResponseEntity<String> deleteMobile(@PathVariable int id) {
 
-		return service.deleteMobile(id);
+		String status= service.deleteMobile(id);
+		if(status==null) {
+			return new ResponseEntity<>(status,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		else {
+			return new ResponseEntity<>(status,HttpStatus.CREATED);
+		}
 	}
 	
 	@GetMapping("mobile/{id}")
-	public Optional<mobile> getMobilebyId(@PathVariable int id) {
-		return service.getMobilebyId(id);
+	public ResponseEntity<Optional<mobile>> getMobilebyId(@PathVariable int id) {
+		Optional<mobile> m1= service.getMobilebyId(id);
+		if(m1.isEmpty()) {
+
+			return new ResponseEntity<>(m1,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		else {
+			return new ResponseEntity<>(m1,HttpStatus.ACCEPTED);
+					
+		}
+		
+		
 	}
 	
 	

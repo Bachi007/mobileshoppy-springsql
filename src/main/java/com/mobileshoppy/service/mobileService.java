@@ -15,8 +15,15 @@ public class mobileService {
 	mobileRepo repo;
 	
 	public String saveMobile(mobile m1) {
-		repo.save(m1);
+		mobile m=repo.save(m1);
+		if(m!=null)
+		{
 		return "mobile is added";
+		}
+		else {
+			return null;
+		}
+		
 	}
 
 	public List<mobile> getMobile(){
